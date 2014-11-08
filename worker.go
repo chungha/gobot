@@ -30,8 +30,7 @@ func (w Worker) Start() {
 
             select {
             case work := <-w.Work:
-                result, err := parser.Indexing(work.url)
-                reducer.Reduce(result)
+                reducer.Reduce(parser.Indexing(work.url))
             case <-w.QuitChan:
                 fmt.Printf("worker %d stopping\n", w.ID)
                 return

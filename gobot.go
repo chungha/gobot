@@ -20,10 +20,15 @@ func Command() {
 
 func main() {
     fmt.Println("Starting the dispatcher")
-    StartDispatcher(4)
+    StartDispatcher(1)
 
     for {
+        fmt.Print("Let me know the url :")
         Collector(os.Stdin)
+        fmt.Print("\n")
+        reducer.Print()
+        fmt.Print("\nCommand :")
         Command()
+        fmt.Println()
     }
 }
