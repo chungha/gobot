@@ -1,6 +1,7 @@
 package reducer
 
 import (
+  "fmt"
   "strings"
   "container/list"
 )
@@ -43,3 +44,9 @@ func Query(w string) string {
   }
   return result
 }
+
+func Print() {
+  for k := range indexMap {
+    fmt.Printf(Query(k))
+  }
+}  

@@ -17,4 +17,5 @@ func TestInput(*testing.T) {
   Reduce(l)
 
   fmt.Printf(Query("word1"))
+  Print()
 }
