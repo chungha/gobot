@@ -1,9 +1,11 @@
 package parser
 
 import (
+    "fmt"
     "regexp"
 	"io/ioutil"
     "net/http"
+	"container/list"
   )
 
 func Download(url string) (html string, err error) {
@@ -20,18 +22,40 @@ func Download(url string) (html string, err error) {
   }
   return string(contents), nil
 }
-
+/*
+func SplitWithWhiteSpace(sentence string) (words []string) {
+  
+  words := strings.Fields(token)
+  if (len(words) > 1) {
+    for _, word := range words {
+    }
+  } else {
+    words
+  }
+  return words
+}
+*/
 func Split(html string) (words []string) {
   tokens := regexp.MustCompile("<.*?>").Split(html, -1)
+  /*for _, token := range tokens {
+    if (len(token) > 0) {
+	  words := SplitWithWhiteSpace(token)
+	}
+  }*/
   return tokens
 }
 
-func Indexing(url string) (results []string, err error) {
+func Indexing(url string) *list.List {
+  var l = list.New()
+
   html, err := Download(url)
   if (err != nil) {
-    return nil, err
+    return l
   }
   words := Split(html)
-  
-  return words, nil
+  for index, word := range(words) {
+    s := fmt.Sprintf("%s %s %d", word, url, index)
+    l.PushBack(s)
+  }
+  return l
 }
