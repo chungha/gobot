@@ -33,7 +33,7 @@ func Query(w string) string {
   }
   var result = w + "\n"
   for k, v := range urlMap {
-    result += " - " + k + " ["
+    result += " - URL : " + k + ", POS [ "
     for e := v.Front(); e != nil; e = e.Next() {
       if p, ok := e.Value.(string); ok {
        result += p + " "
