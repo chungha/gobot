@@ -6,13 +6,18 @@
 package main
 
 import (
-  "fmt"
+  "gobot/input"
   "gobot/indexer"
   "gobot/reducer"
 )
 
 
 func main() {
-  list := indexer.Indexing("http://daum.net")
-  Reduce(list)
+  list := input.Input()
+  for e := list.Front(); e != nil; e = e.Next() {
+    url := e.Value.(string)
+    list := indexer.Indexing(url)
+    reducer.Reduce(list)
+  }
+  reducer.Print()
 }

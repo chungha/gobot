@@ -53,4 +53,4 @@ func Print() {
   for k := range indexMap {
     fmt.Printf(QueryPrint(k))
   }
-}  
+}

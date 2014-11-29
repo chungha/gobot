@@ -1,4 +1,4 @@
-package parser
+package indexer
 
 import (
   "fmt"
@@ -26,14 +26,17 @@ func Split(html string) (tokens *list.List) {
   sentences := regexp.MustCompile("<.*?>").Split(html, -1)
 
   tokens = list.New()
-  for i := 0; i < len(sentences); i++ {
-  	tokens.PushBack(Tokenize(sentences[i]))
+  for _, sentence := range sentences {
+    tarray := Tokenize(sentence)
+    for _, t := range tarray {
+      tokens.PushBack(t)
+    }
   }
   return tokens
 }
 
 func Tokenize(sentence string) (words []string) {
-	return strings.Split(sentence, " ")
+  return strings.Split(sentence, " ")
 }
 
 func Indexing(url string) *list.List {
