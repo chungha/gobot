@@ -1,20 +1,18 @@
 package parser
 
 import (
-    "fmt"
-    "regexp"
-	"io/ioutil"
-    "net/http"
-	"container/list"
-  )
+  "fmt"
+  "regexp"
+  "io/ioutil"
+  "net/http"
+  "container/list"
+)
 
 func Download(url string) (html string, err error) {
-
   response, err := http.Get(url)
   if err != nil {
     return "", err
   }
-  
   defer response.Body.Close()
   contents, err := ioutil.ReadAll(response.Body)
   if err != nil {
@@ -22,19 +20,7 @@ func Download(url string) (html string, err error) {
   }
   return string(contents), nil
 }
-/*
-func SplitWithWhiteSpace(sentence string) (words []string) {
-  
-  words := strings.Fields(token)
-  if (len(words) > 1) {
-    for _, word := range words {
-    }
-  } else {
-    words
-  }
-  return words
-}
-*/
+
 func Split(html string) (words []string) {
   tokens := regexp.MustCompile("<.*?>").Split(html, -1)
   /*for _, token := range tokens {
