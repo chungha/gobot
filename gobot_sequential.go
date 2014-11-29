@@ -7,9 +7,12 @@ package main
 
 import (
   "fmt"
+  "gobot/indexer"
+  "gobot/reducer"
 )
 
 
 func main() {
-  fmt.Println("Hello! gobot!")
+  list := indexer.Indexing("http://daum.net")
+  Reduce(list)
 }

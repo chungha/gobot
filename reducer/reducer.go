@@ -27,7 +27,11 @@ func Reduce(l *list.List) {
   }
 }
 
-func Query(w string) string {
+func Query(w string) map[string]*list.List {
+  return indexMap[w]
+}
+
+func QueryPrint(w string) string {
   urlMap, ok := indexMap[w]
   if !ok {
     return "none"
@@ -47,6 +51,6 @@ func Query(w string) string {
 
 func Print() {
   for k := range indexMap {
-    fmt.Printf(Query(k))
+    fmt.Printf(QueryPrint(k))
   }
 }  
