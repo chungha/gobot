@@ -5,7 +5,7 @@ import (
   "fmt"
 )
 
-func Test_Split(*testing.T) {
+func Test_Split(t *testing.T) {
   l := Split("<xxx>I am a boy.</xxx>")
   for e := l.Front(); e != nil; e = e.Next() {
     if v, ok := e.Value.(string); ok {
@@ -14,7 +14,11 @@ func Test_Split(*testing.T) {
   }
 }
 
-func Test_Tokenize(*testing.T) {
-  words := Tokenize("I am a Boy.");
+func Test_Tokenize(t *testing.T) {
+  words := Tokenize("I am a Boy!.");
   fmt.Printf("%q\n", words);
+
+  if words[3] != "Boy" {
+    t.Error("The third result. Expected : Boy, but " + words[3])
+  }
 }
