@@ -9,9 +9,11 @@ import (
 var WorkQueue = make(chan WorkRequest, 100)
 
 func request(url string) {
-    work := WorkRequest{url: url}
-    WorkQueue <- work
-    fmt.Println("requested : ", url)
+    go func() {
+        work := WorkRequest{url: url}
+        WorkQueue <- work
+        fmt.Println("requested : ", url)
+    }()
 }
 
 func Collector(reader io.Reader) {
