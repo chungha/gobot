@@ -1,7 +1,8 @@
-package parser
+package indexer
 
 import (
   "fmt"
+  "strings"
   "regexp"
   "io/ioutil"
   "net/http"
@@ -21,18 +22,21 @@ func Download(url string) (html string, err error) {
   return string(contents), nil
 }
 
-func Split(html string) (words []string) {
+func Split(html string) (tokens *list.List) {
   sentences := regexp.MustCompile("<.*?>").Split(html, -1)
-  /*for _, token := range tokens {
-    if (len(token) > 0) {
-	  words := SplitWithWhiteSpace(token)
-	}
-  }*/
+
+  tokens = list.New()
+  for _, sentence := range sentences {
+    tarray := Tokenize(sentence)
+    for _, t := range tarray {
+      tokens.PushBack(t)
+    }
+  }
   return tokens
 }
 
 func Tokenize(sentence string) (words []string) {
-
+  return strings.Split(sentence, " ")
 }
 
 func Indexing(url string) *list.List {
@@ -42,9 +46,9 @@ func Indexing(url string) *list.List {
   if (err != nil) {
     return l
   }
-  words := Split(html)
-  for index, word := range(words) {
-    s := fmt.Sprintf("%s %s %d", word, url, index)
+  tokens := Split(html)
+  for e := tokens.Front(); e != nil; e = e.Next() {
+    s := fmt.Sprintf("%s %s %d", e.Value.(string), url, 0)
     l.PushBack(s)
   }
   return l
