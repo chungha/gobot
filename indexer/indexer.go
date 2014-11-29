@@ -35,8 +35,12 @@ func Split(html string) (tokens *list.List) {
   return tokens
 }
 
-func Tokenize(sentence string) (words []string) {
-  return strings.Split(sentence, " ")
+func Tokenize(sentence string) (tokens []string) {
+  tokens = strings.Split(sentence, " ")
+  for i, token := range tokens {
+    tokens[i] = strings.Trim(token, ".()!?,")
+  }
+  return tokens
 }
 
 func Indexing(url string) *list.List {
