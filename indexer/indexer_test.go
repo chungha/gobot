@@ -13,3 +13,8 @@ func Test_Split(*testing.T) {
     }
   }
 }
+
+func Test_Tokenize(*testing.T) {
+  words := Tokenize("I am a Boy.");
+
+}

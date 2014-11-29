@@ -22,13 +22,17 @@ func Download(url string) (html string, err error) {
 }
 
 func Split(html string) (words []string) {
-  tokens := regexp.MustCompile("<.*?>").Split(html, -1)
+  sentences := regexp.MustCompile("<.*?>").Split(html, -1)
   /*for _, token := range tokens {
     if (len(token) > 0) {
 	  words := SplitWithWhiteSpace(token)
 	}
   }*/
   return tokens
+}
+
+func Tokenize(sentence string) (words []string) {
+
 }
 
 func Indexing(url string) *list.List {
