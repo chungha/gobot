@@ -27,11 +27,11 @@ func readLines(path string) ([]string, error) {
 }
 
 
-func Input() *list.List {
+func Input(filePath string) *list.List {
 
   inputs := list.New();
 
-  lines, err := readLines("urls")
+  lines, err := readLines(filePath)
   if err != nil {
     fmt.Println("can not read file")
     return inputs

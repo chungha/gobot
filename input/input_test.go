@@ -8,7 +8,7 @@ import (
 )
 
 func Test_Input(*testing.T) {
-  inputs := Input();
+  inputs := Input("urls");
 
   for e := inputs.Front(); e != nil; e = e.Next() {
     fmt.Println(e.Value)
