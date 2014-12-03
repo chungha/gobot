@@ -13,7 +13,7 @@ import (
 
 
 func main() {
-  indexMap := indexmap.New();
+  indexMap := indexmap.NewSync();
   list := input.Input("input/urls")
   for e := list.Front(); e != nil; e = e.Next() {
     url := e.Value.(string)

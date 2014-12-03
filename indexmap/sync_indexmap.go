@@ -4,18 +4,21 @@ import (
   "container/list"
   "fmt"
   "strings"
+  "sync"
 )
 
-type IndexMap struct {
+type SyncIndexMap struct {
+  sync.RWMutex
   indexMap_ map[string]map[string]*list.List
 }
 
-func New() IndexMap {
-  return IndexMap { make(map[string]map[string]*list.List) }
+func NewSync() SyncIndexMap {
+  return SyncIndexMap { indexMap_: make(map[string]map[string]*list.List) }
 }
 
 
-func (i IndexMap) AddIndexStringList(l *list.List) {
+func (i SyncIndexMap) AddIndexStringList(l *list.List) {
+  i.Lock()
   for e := l.Front(); e != nil; e = e.Next() {
     if v, ok := e.Value.(string); ok {
       data := strings.Split(v, " ")
@@ -32,15 +35,21 @@ func (i IndexMap) AddIndexStringList(l *list.List) {
       i.indexMap_[data[0]] = urlMap
     }
   }
+  i.Unlock()
 }
 
-func (i IndexMap) Query(w string) map[string]*list.List {
-  return i.indexMap_[w]
+func (i SyncIndexMap) Query(w string) map[string]*list.List {
+  i.RLock();
+  result := i.indexMap_[w]
+  i.RUnlock();
+  return result
 }
 
-func (i IndexMap) QueryPrint(w string) string {
+func (i SyncIndexMap) QueryPrint(w string) string {
+  i.RLock();
   urlMap, ok := i.indexMap_[w]
   if !ok {
+    i.RUnlock();
     return "none"
   }
   var result = w + "\n"
@@ -53,10 +62,11 @@ func (i IndexMap) QueryPrint(w string) string {
     }
     result += "]\n"
   }
+  i.RUnlock();
   return result
 }
 
-func (i IndexMap) Print() {
+func (i SyncIndexMap) Print() {
   for k := range i.indexMap_ {
     fmt.Printf(i.QueryPrint(k))
   }
