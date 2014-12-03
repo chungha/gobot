@@ -1,4 +1,4 @@
-package reducer
+package indexmap
 
 import (
   "fmt"
@@ -6,13 +6,20 @@ import (
   "container/list"
 )
 
-var indexMap = make(map[string]map[string]*list.List)
+type IndexMap struct {
+  indexMap_ map[string]map[string]*list.List;
+}
 
-func Reduce(l *list.List) {
+func New() IndexMap {
+  return IndexMap{make(map[string]map[string]*list.List)}
+}
+
+
+func (i IndexMap) AddIndexStringList(l *list.List) {
   for e := l.Front(); e != nil; e = e.Next() {
     if v, ok := e.Value.(string); ok {
       data := strings.Split(v, " ")
-      urlMap, ok := indexMap[data[0]]
+      urlMap, ok := i.indexMap_[data[0]]
       if !ok {
         urlMap = make(map[string]*list.List)
       }
@@ -22,17 +29,17 @@ func Reduce(l *list.List) {
       }
       posList.PushBack(data[2])
       urlMap[data[1]] = posList
-      indexMap[data[0]] = urlMap
+      i.indexMap_[data[0]] = urlMap
     }
   }
 }
 
-func Query(w string) map[string]*list.List {
-  return indexMap[w]
+func (i IndexMap) Query(w string) map[string]*list.List {
+  return i.indexMap_[w]
 }
 
-func QueryPrint(w string) string {
-  urlMap, ok := indexMap[w]
+func (i IndexMap) QueryPrint(w string) string {
+  urlMap, ok := i.indexMap_[w]
   if !ok {
     return "none"
   }
@@ -49,8 +56,8 @@ func QueryPrint(w string) string {
   return result
 }
 
-func Print() {
-  for k := range indexMap {
-    fmt.Printf(QueryPrint(k))
+func (i IndexMap) Print() {
+  for k := range i.indexMap_ {
+    fmt.Printf(i.QueryPrint(k))
   }
 }

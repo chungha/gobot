@@ -1,4 +1,4 @@
-package reducer
+package indexmap
 
 import (
   "fmt"
@@ -6,15 +6,17 @@ import (
   "container/list"
 )
 
-func TestReduceMultiURL(t *testing.T) {
+func TestAddIndexStringListMultiURL(t *testing.T) {
   l := list.New()
   l.PushBack("word1 url_1 3")
   l.PushBack("word1 url_1 2")
   l.PushBack("word1 url_2 3")
 
-  Reduce(l)
+  indexMap := NewIndexMap()
 
-  rmap := Query("word1")
+  indexMap.AddIndexStringList(l)
+
+  rmap := indexMap.Query("word1")
   rlist, ok := rmap["url_1"]
   if !ok {
     t.Error("nope url_1")

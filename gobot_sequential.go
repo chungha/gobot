@@ -8,16 +8,17 @@ package main
 import (
   "gobot/input"
   "gobot/indexer"
-  "gobot/reducer"
+  "gobot/indexmap"
 )
 
 
 func main() {
+  indexMap := indexmap.New();
   list := input.Input("input/urls")
   for e := list.Front(); e != nil; e = e.Next() {
     url := e.Value.(string)
     list := indexer.Indexing(url)
-    reducer.Reduce(list)
+    indexMap.AddIndexStringList(list)
   }
   //reducer.Print()
 }
