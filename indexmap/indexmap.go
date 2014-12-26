@@ -15,7 +15,6 @@ func New() *IndexMap {
   return &IndexMap { make(map[string]map[string]*list.List) }
 }
 
-
 func (i *IndexMap) AddIndexStringList(l *list.List) {
   for e := l.Front(); e != nil; e = e.Next() {
     if v, ok := e.Value.(string); ok {
