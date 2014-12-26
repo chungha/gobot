@@ -59,36 +59,27 @@ func Indexing(url string) *list.List {
 	return l
 }
 
-//func IndexingToMap(urls []string) *indexmap.IndexMap {
-//	indexMap := indexmap.New()
+func IndexingToMap(urls []string) *indexmap.IndexMap {
+	indexMap := indexmap.New()
 
-//	for _, url := range urls {
-//		indexingToMapSub(url, &indexMap)
-//	}
+	for _, url := range urls {
+		indexingToMapSub(url, &indexMap)
+	}
 
-//	return &indexMap
-//}
+	return &indexMap
+}
 
-func IndexingToMap(url string) *indexmap.IndexMap {
-	index := indexmap.New()
-
+func indexingToMapSub(url []string, indexMap *indexmap) {
 	html, err := Download(url)
 	if err != nil {
-		return nil
+		return l
 	}
 
 	tokens := Split(html)
 
-	i := 1
-	for e := tokens.Front(); e != nil; e = e.Next() {
-		e_ := e.Value.(string)
-		if len(e_) <= 0 {
-			continue
-		}
-		//for i, e := range tokens {
-		index.Add(e.Value.(string), url, i)
-		i++
+	for i, e := range tokens {
+		indexMap.Add(e.Value.(string), url, i)
 	}
 
-	return index
+	return
 }
