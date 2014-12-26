@@ -10,12 +10,12 @@ type IndexMap struct {
   indexMap_ map[string]map[string]*list.List
 }
 
-func New() IndexMap {
-  return IndexMap { make(map[string]map[string]*list.List) }
+func New() *IndexMap {
+  return &IndexMap { make(map[string]map[string]*list.List) }
 }
 
 
-func (i IndexMap) AddIndexStringList(l *list.List) {
+func (i *IndexMap) AddIndexStringList(l *list.List) {
   for e := l.Front(); e != nil; e = e.Next() {
     if v, ok := e.Value.(string); ok {
       data := strings.Split(v, " ")
@@ -34,11 +34,11 @@ func (i IndexMap) AddIndexStringList(l *list.List) {
   }
 }
 
-func (i IndexMap) Query(w string) map[string]*list.List {
+func (i *IndexMap) Query(w string) map[string]*list.List {
   return i.indexMap_[w]
 }
 
-func (i IndexMap) QueryPrint(w string) string {
+func (i *IndexMap) QueryPrint(w string) string {
   urlMap, ok := i.indexMap_[w]
   if !ok {
     return "none"
@@ -56,7 +56,7 @@ func (i IndexMap) QueryPrint(w string) string {
   return result
 }
 
-func (i IndexMap) Print() {
+func (i *IndexMap) Print() {
   for k := range i.indexMap_ {
     fmt.Printf(i.QueryPrint(k))
   }

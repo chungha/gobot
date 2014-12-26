@@ -7,6 +7,7 @@ import (
   "io/ioutil"
   "net/http"
   "container/list"
+  "gobot/indexmap"
 )
 
 func Download(url string) (html string, err error) {
@@ -56,4 +57,10 @@ func Indexing(url string) *list.List {
     l.PushBack(s)
   }
   return l
+}
+
+func IndexingToMap(url string) *indexmap.IndexMap {
+  var indexMap = indexmap.New();
+
+  return indexMap;
 }

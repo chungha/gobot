@@ -22,3 +22,7 @@ func Test_Tokenize(t *testing.T) {
     t.Error("The third result. Expected : Boy, but " + words[3])
   }
 }
+
+func Test_Indexing(t *testing.T) {
+  var indexMap = IndexingToMap("http://en.wikipedia.org/wiki/Peace");
+}
