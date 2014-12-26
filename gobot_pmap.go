@@ -8,16 +8,21 @@ package main
 import (
   "fmt"
   "gobot/input"
+  "gobot/indexmap"
+  "gobot/indexer"
+  "gobot/merger"
 )
+
+var globalIndexMap = indexmap.NewSync()
 
 type WorkRequest struct {
   urls []string
-  term bool
 }
 
 type Worker struct {
   ID int
   Work chan WorkRequest
+  Done chan bool
 }
 
 func (w Worker) Start() {
@@ -25,24 +30,20 @@ func (w Worker) Start() {
     for {
       work := <-w.Work
 
-      if work.term {
-        fmt.Printf("worker %d stopping\n", w.ID)
-        return
-      }
+      fmt.Printf("ID:%d = input(%d) - %s\n", w.ID, len(work.urls), work.urls)
+      var indexMap = indexer.IndexingUrlsToMap(work.urls)
+      merger.Merge(&globalIndexMap, indexMap)
 
-      fmt.Printf("input - %s\n", work.urls)
+      w.Done <- true
     }
   }()
-}
-
-func (w Worker) Stop() {
-  w.Work <- WorkRequest {urls: nil, term: true}
 }
 
 func NewWorker(id int) Worker {
   worker := Worker {
     ID: id,
     Work: make(chan WorkRequest),
+    Done: make(chan bool),
   }
   return worker
 }
@@ -71,12 +72,12 @@ func GobotPmap(num_thread int) {
   offset := url_len/num_thread
   index := 0
   for ths:=0; ths<(num_thread-1); ths++ {
-    workers[ths].Work <- WorkRequest {urls: url_array[index:index+offset], term: false}
+    workers[ths].Work <- WorkRequest {urls: url_array[index:index+offset]}
     index = index + offset
   }
-  workers[num_thread-1].Work <- WorkRequest {urls: url_array[index:url_len], term: false}
+  workers[num_thread-1].Work <- WorkRequest {urls: url_array[index:url_len]}
 
   for i:=0; i<num_thread; i++ {
-    workers[i].Stop()
+    <-workers[i].Done
   }
 }

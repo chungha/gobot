@@ -1,5 +1,6 @@
 package main
 
 func main() {
-  GobotPmap(10)
+  GobotPmap(16)
+  //GobotSequential(); 
 }
