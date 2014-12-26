@@ -11,7 +11,7 @@ import (
 )
 
 type WorkRequest struct {
-  urls string
+  urls []string
   term bool
 }
 
@@ -36,7 +36,7 @@ func (w Worker) Start() {
 }
 
 func (w Worker) Stop() {
-  w.Work <- WorkRequest {urls: "", term: true}
+  w.Work <- WorkRequest {urls: nil, term: true}
 }
 
 func NewWorker(id int) Worker {
@@ -47,15 +47,36 @@ func NewWorker(id int) Worker {
   return worker
 }
 
-func GobotPmap() {
-  worker := NewWorker(0)
-  worker.Start()
+func GobotPmap(num_thread int) {
+  if num_thread <= 0 {
+    fmt.Printf("Thread should be more than 1")
+    return
+  }
+
+  workers := make([]Worker, num_thread)
+  for i:=0; i<num_thread; i++ {
+    worker := NewWorker(i)
+    worker.Start()
+    workers[i] = worker
+  }
 
   list := input.Input("input/urls")
+  var url_array []string
   for e := list.Front(); e != nil; e = e.Next() {
     url := e.Value.(string)
-
-    worker.Work <- WorkRequest {urls: url, term: false}
+    url_array = append(url_array, url)
   }
-  worker.Stop();
+
+  url_len := len(url_array)
+  offset := url_len/num_thread
+  index := 0
+  for ths:=0; ths<(num_thread-1); ths++ {
+    workers[ths].Work <- WorkRequest {urls: url_array[index:index+offset], term: false}
+    index = index + offset
+  }
+  workers[num_thread-1].Work <- WorkRequest {urls: url_array[index:url_len], term: false}
+
+  for i:=0; i<num_thread; i++ {
+    workers[i].Stop()
+  }
 }
