@@ -7,10 +7,15 @@ import (
 )
 
 func Test_Split(t *testing.T) {
-	l := Split("<xxx>I am a boy.</xxx> \r\n haha\r\n\t-\r\n-")
+	l := Split("<xxx>000\tAAA\r\n888<xxx>")
+
+	if l.Len() != 3 {
+		t.Error("splitted length should be 3.")
+		return
+	}
 	for e := l.Front(); e != nil; e = e.Next() {
 		if v, ok := e.Value.(string); ok {
-			fmt.Printf(">%s\n", v)
+			fmt.Printf("---%s---\n", v)
 		}
 	}
 }
@@ -87,4 +92,5 @@ func Test_IndexingToMap(t *testing.T) {
 
 		i++
 	}
+
 }
