@@ -1,26 +1,26 @@
 package indexer
 
 import (
-  "fmt"
-  "strings"
-  "regexp"
-  "io/ioutil"
-  "net/http"
-  "container/list"
-  "gobot/indexmap"
+	"container/list"
+	"fmt"
+	"gobot/indexmap"
+	"io/ioutil"
+	"net/http"
+	"regexp"
+	"strings"
 )
 
 func Download(url string) (html string, err error) {
-  response, err := http.Get(url)
-  if err != nil {
-    return "", err
-  }
-  defer response.Body.Close()
-  contents, err := ioutil.ReadAll(response.Body)
-  if err != nil {
-    return "", err
-  }
-  return string(contents), nil
+	response, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+	defer response.Body.Close()
+	contents, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return "", err
+	}
+	return string(contents), nil
 }
 
 func Split(html string) (tokens *list.List) {
@@ -49,22 +49,50 @@ func Tokenize(sentence string) (tokens []string) {
 }
 
 func Indexing(url string) *list.List {
-  var l = list.New()
+	var l = list.New()
 
-  html, err := Download(url)
-  if (err != nil) {
-    return l
-  }
-  tokens := Split(html)
-  for e := tokens.Front(); e != nil; e = e.Next() {
-    s := fmt.Sprintf("%s %s %d", e.Value.(string), url, 0)
-    l.PushBack(s)
-  }
-  return l
+	html, err := Download(url)
+	if err != nil {
+		return l
+	}
+	tokens := Split(html)
+	for e := tokens.Front(); e != nil; e = e.Next() {
+		s := fmt.Sprintf("%s %s %d", e.Value.(string), url, 0)
+		l.PushBack(s)
+	}
+	return l
 }
 
-func IndexingToMap(url string) *indexmap.IndexMap {
-  var indexMap = indexmap.New();
+//func IndexingToMap(urls []string) *indexmap.IndexMap {
+//	indexMap := indexmap.New()
 
-  return indexMap;
+//	for _, url := range urls {
+//		indexingToMapSub(url, &indexMap)
+//	}
+
+//	return &indexMap
+//}
+
+func IndexingToMap(url string) *indexmap.IndexMap {
+	index := indexmap.New()
+
+	html, err := Download(url)
+	if err != nil {
+		return nil
+	}
+
+	tokens := Split(html)
+
+	i := 1
+	for e := tokens.Front(); e != nil; e = e.Next() {
+		e_ := e.Value.(string)
+		if len(e_) <= 0 {
+			continue
+		}
+		//for i, e := range tokens {
+		index.Add(e.Value.(string), url, i)
+		i++
+	}
+
+	return index
 }
