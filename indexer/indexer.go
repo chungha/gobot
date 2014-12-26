@@ -24,13 +24,17 @@ func Download(url string) (html string, err error) {
 }
 
 func Split(html string) (tokens *list.List) {
+  reg, _ := regexp.Compile("[^A-Za-z0-9]+")
+
   sentences := regexp.MustCompile("<.*?>").Split(html, -1)
 
   tokens = list.New()
   for _, sentence := range sentences {
-    tarray := Tokenize(sentence)
+    tarray := Tokenize(reg.ReplaceAllString(sentence, " "))
     for _, t := range tarray {
-      tokens.PushBack(t)
+      if len(t) > 0 {
+        tokens.PushBack(t)
+      }
     }
   }
   return tokens
@@ -39,7 +43,7 @@ func Split(html string) (tokens *list.List) {
 func Tokenize(sentence string) (tokens []string) {
   tokens = strings.Split(sentence, " ")
   for i, token := range tokens {
-    tokens[i] = strings.Trim(token, ".()!?,")
+    tokens[i] = strings.Trim(token, ".()!?,\t\r\n")
   }
   return tokens
 }
