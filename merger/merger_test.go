@@ -16,4 +16,21 @@ func TestMerger(t *testing.T) {
 
   Merge(dst, src);
 
+  posList, ok := dst.QueryWordAndUrl("word1", "url1")
+  if !ok || posList.Len() != 1 {
+    t.Error("Nope word1 and url1 or posList.Len() != 1")
+    return
+  }
+
+  posList, ok = dst.QueryWordAndUrl("word1", "url2")
+  if !ok || posList.Len() != 1 {
+    t.Error("Nope word1 and url2 or posList.Len() != 1")
+    return
+  }
+
+  posList, ok = dst.QueryWordAndUrl("word2", "url1")
+  if !ok || posList.Len() != 2 {
+    t.Error("Nope word2 and url1 or posList.Len() != 2")
+    return
+  }
 }

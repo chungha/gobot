@@ -8,7 +8,7 @@ import (
 )
 
 type IndexMap struct {
-  indexMap_ map[string]map[string]*list.List
+  IndexMapData map[string]map[string]*list.List
 }
 
 func New() *IndexMap {
@@ -26,7 +26,7 @@ func (i *IndexMap) AddIndexStringList(l *list.List) {
 }
 
 func (i *IndexMap) Add(word string, url string, pos int) *IndexMap {
-  urlMap, ok := i.indexMap_[word]
+  urlMap, ok := i.IndexMapData[word]
   if !ok {
     urlMap = make(map[string]*list.List)
   }
@@ -36,16 +36,16 @@ func (i *IndexMap) Add(word string, url string, pos int) *IndexMap {
   }
   posList.PushBack(pos)
   urlMap[url] = posList
-  i.indexMap_[word] = urlMap
+  i.IndexMapData[word] = urlMap
   return i
 }
 
 func (i *IndexMap) QueryWord(w string) map[string]*list.List {
-  return i.indexMap_[w]
+  return i.IndexMapData[w]
 }
 
 func (i *IndexMap) QueryWordAndUrl(word string, url string) (*list.List, bool) {
-  urlMap, ok := i.indexMap_[word]
+  urlMap, ok := i.IndexMapData[word]
   if !ok {
     return nil, false
   }
@@ -57,7 +57,7 @@ func (i *IndexMap) QueryWordAndUrl(word string, url string) (*list.List, bool) {
 }
 
 func (i *IndexMap) QueryPrint(w string) string {
-  urlMap, ok := i.indexMap_[w]
+  urlMap, ok := i.IndexMapData[w]
   if !ok {
     return "none"
   }
@@ -75,7 +75,7 @@ func (i *IndexMap) QueryPrint(w string) string {
 }
 
 func (i *IndexMap) Print() {
-  for k := range i.indexMap_ {
+  for k := range i.IndexMapData {
     fmt.Printf(i.QueryPrint(k))
   }
 }
