@@ -65,11 +65,7 @@ func Test_IndexingToMap(t *testing.T) {
 			continue
 		}
 
-		fmt.Printf("%s - %d\n", w_, len(w_))
-
-		//i := 1
-		//for w := l.Front(); w != nil; w = w.Next() {
-		//	w_ := w.Value.(string)
+		//fmt.Printf("%s - %d\n", w_, len(w_))
 
 		list, isExist := indexMap.QueryWordAndUrl(w_, url)
 
@@ -79,14 +75,14 @@ func Test_IndexingToMap(t *testing.T) {
 
 		check := false
 		for u := list.Front(); u != nil; u = u.Next() {
-			//for _, u := range for w := l.Front(); w != nil; w = w.Next() { {
 			if u.Value.(int) == i {
+				check = true
 				break
 			}
 		}
 
 		if check == false {
-			t.Error("position is not exist %s, %s, %d", w_, url, i)
+			t.Error("position is not exist ", w_, ", ", url, ", ", i)
 			break
 		}
 
