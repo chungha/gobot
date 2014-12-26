@@ -11,17 +11,12 @@ func TestAdd(t *testing.T) {
 
   indexMap.Add("word", "url", 0)
 
-  rmap := indexMap.Query("word")
-  if rmap == nil {
-    t.Error("nope word")
-    return
-  }
-  rlist, ok := rmap["url"]
+  posList, ok := indexMap.QueryWordAndUrl("word", "url")
   if !ok {
     t.Error("nope url")
     return
   }
-  if rlist.Len() != 1 {
+  if posList.Len() != 1 {
     t.Error("rlist's length should be 1")
     return
   }
@@ -37,7 +32,7 @@ func TestAddIndexStringListMultiURL(t *testing.T) {
 
   indexMap.AddIndexStringList(l)
 
-  rmap := indexMap.Query("word1")
+  rmap := indexMap.QueryWord("word1")
   rlist, ok := rmap["url_1"]
   if !ok {
     t.Error("nope url_1")

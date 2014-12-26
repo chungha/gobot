@@ -40,8 +40,20 @@ func (i *IndexMap) Add(word string, url string, pos int) *IndexMap {
   return i
 }
 
-func (i *IndexMap) Query(w string) map[string]*list.List {
+func (i *IndexMap) QueryWord(w string) map[string]*list.List {
   return i.indexMap_[w]
+}
+
+func (i *IndexMap) QueryWordAndUrl(word string, url string) (*list.List, bool) {
+  urlMap, ok := i.indexMap_[word]
+  if !ok {
+    return nil, false
+  }
+  posList, ok := urlMap[url]
+  if !ok {
+    return nil, false
+  }
+  return posList, true
 }
 
 func (i *IndexMap) QueryPrint(w string) string {
