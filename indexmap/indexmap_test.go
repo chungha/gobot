@@ -12,7 +12,7 @@ func TestAddIndexStringListMultiURL(t *testing.T) {
   l.PushBack("word1 url_1 2")
   l.PushBack("word1 url_2 3")
 
-  indexMap := NewIndexMap()
+  indexMap := New()
 
   indexMap.AddIndexStringList(l)
 
