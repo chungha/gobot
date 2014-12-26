@@ -6,6 +6,27 @@ import (
   "container/list"
 )
 
+func TestAdd(t *testing.T) {
+  indexMap := New();
+
+  indexMap.Add("word", "url", 0)
+
+  rmap := indexMap.Query("word")
+  if rmap == nil {
+    t.Error("nope word")
+    return
+  }
+  rlist, ok := rmap["url"]
+  if !ok {
+    t.Error("nope url")
+    return
+  }
+  if rlist.Len() != 1 {
+    t.Error("rlist's length should be 1")
+    return
+  }
+}
+
 func TestAddIndexStringListMultiURL(t *testing.T) {
   l := list.New()
   l.PushBack("word1 url_1 3")
@@ -20,30 +41,37 @@ func TestAddIndexStringListMultiURL(t *testing.T) {
   rlist, ok := rmap["url_1"]
   if !ok {
     t.Error("nope url_1")
+    return
   }
 
   if rlist.Len() != 2 {
     t.Error(fmt.Sprint("Result list length should be 2. but %d", rlist.Len()));
+    return
   }
   iter := rlist.Front()
-  if iter.Value.(string) != "3" {
-    t.Error("Result list should contain 3. but " + rlist.Front().Value.(string));
+  if iter.Value.(int) != 3 {
+    t.Error("Result list should contain 3. but %d", rlist.Front().Value.(int));
+    return
   }
   iter = iter.Next()
-  if iter.Value.(string) != "2" {
-    t.Error("Result list should contain 2. but " + rlist.Front().Value.(string));
+  if iter.Value.(int) != 2 {
+    t.Error("Result list should contain 2. but %d", rlist.Front().Value.(int));
+    return
   }
 
   rlist, ok = rmap["url_2"]
   if !ok {
     t.Error("nope url_2")
+    return
   }
 
   if rlist.Len() != 1 {
     t.Error(fmt.Sprint("Result list length should be 1. but %d", rlist.Len()));
+    return
   }
   iter = rlist.Front()
-  if iter.Value.(string) != "3" {
-    t.Error("Result list should contain 3. but " + rlist.Front().Value.(string));
+  if iter.Value.(int) != 3 {
+    t.Error("Result list should contain 3. but %d", rlist.Front().Value.(int));
+    return
   }
 }
