@@ -5,6 +5,7 @@ import (
   "fmt"
   "strings"
   "sync"
+  "strconv"
 )
 
 type SyncIndexMap struct {
@@ -18,24 +19,30 @@ func NewSync() SyncIndexMap {
 
 
 func (i SyncIndexMap) AddIndexStringList(l *list.List) {
-  i.Lock()
   for e := l.Front(); e != nil; e = e.Next() {
     if v, ok := e.Value.(string); ok {
       data := strings.Split(v, " ")
-      urlMap, ok := i.indexMap_[data[0]]
-      if !ok {
-        urlMap = make(map[string]*list.List)
-      }
-      posList, ok := urlMap[data[1]]
-      if !ok {
-        posList = list.New()
-      }
-      posList.PushBack(data[2])
-      urlMap[data[1]] = posList
-      i.indexMap_[data[0]] = urlMap
+      pos, _ := strconv.Atoi(data[2])
+      i.Add(data[0], data[1], pos)
     }
   }
+}
+
+func (i *SyncIndexMap) Add(word string, url string, pos int) *SyncIndexMap {
+  i.Lock()
+  urlMap, ok := i.indexMap_[word]
+  if !ok {
+    urlMap = make(map[string]*list.List)
+  }
+  posList, ok := urlMap[url]
+  if !ok {
+    posList = list.New()
+  }
+  posList.PushBack(pos)
+  urlMap[url] = posList
+  i.indexMap_[word] = urlMap
   i.Unlock()
+  return i
 }
 
 func (i SyncIndexMap) Query(w string) map[string]*list.List {
@@ -56,8 +63,8 @@ func (i SyncIndexMap) QueryPrint(w string) string {
   for k, v := range urlMap {
     result += " - URL : " + k + ", POS [ "
     for e := v.Front(); e != nil; e = e.Next() {
-      if p, ok := e.Value.(string); ok {
-       result += p + " "
+      if p, ok := e.Value.(int); ok {
+       result += strconv.Itoa(p) + " "
       }
     }
     result += "]\n"
