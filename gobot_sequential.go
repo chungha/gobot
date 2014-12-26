@@ -12,7 +12,7 @@ import (
 )
 
 
-func main() {
+func GobotSequential() {
   indexMap := indexmap.NewSync();
   list := input.Input("input/urls")
   for e := list.Front(); e != nil; e = e.Next() {
