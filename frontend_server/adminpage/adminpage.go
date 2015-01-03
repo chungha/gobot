@@ -20,7 +20,7 @@ func MakePage(w http.ResponseWriter, r *http.Request) {
 	//}
 
 	v3 := r.PostFormValue("url")
-	if v3 != nil {
+	if len(v3) > 0 {
 		//	send url address to backend
 		fmt.Println(v3)
 	}
