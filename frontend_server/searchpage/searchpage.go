@@ -2,10 +2,37 @@ package searchpage
 
 import (
 	"fmt"
-	"html"
 	"net/http"
+	"os"
 )
 
 func MakePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "search, %q", html.EscapeString(r.URL.Path))
+	page, _ := loadHTML("searchpage/search.html")
+	fmt.Fprintf(w, page)
+
+	v := r.URL.Query()
+	for a, b := range v {
+		fmt.Println(a, b)
+		//	send url address to backend
+	}
+}
+
+func loadHTML(filePath string) (string, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+
+	fi, err := file.Stat()
+	if err != nil {
+		return "", err
+	}
+
+	tmpBuff := make([]byte, fi.Size())
+
+	n, _ := file.Read(tmpBuff)
+	fmt.Println("size: ", n)
+
+	return string(tmpBuff), nil
 }

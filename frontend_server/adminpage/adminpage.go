@@ -2,7 +2,6 @@ package adminpage
 
 import (
 	"fmt"
-	//"html"
 	"net/http"
 	"os"
 )
