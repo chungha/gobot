@@ -1,42 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My first web page</title>
+    <title>Admin page</title>
 </head>
 
 <body>
+	<h3>Input url</h3>
 
-	<h3>Some random table</h3>
-	<table>
-		<tr>
-			<td>Row 1, cell 1</td>
-			<td>Row 1, cell 2</td>
-			<td>Row 1, cell 3</td>
-		</tr>
-		<tr>
-			<td>Row 2, cell 1</td>
-			<td>Row 2, cell 2</td>
-			<td>Row 2, cell 3</td>
-		</tr>
-		<tr>
-			<td>Row 3, cell 1</td>
-			<td>Row 3, cell 2</td>
-			<td>Row 3, cell 3</td>
-		</tr>
-		<tr>
-			<td>Row 4, cell 1</td>
-			<td>Row 4, cell 2</td>
-			<td>Row 4, cell 3</td>
-		</tr>
-	</table>
-
-	<h3>Some random form</h3>
-	<p><strong>Note:</strong> It looks the part, but won't do a damned thing.</p>
-
-	<form action="localhost:4000?a=1234" method="GET">
+	<form action="http://localhost:4000/admin" method="post">
 
 		<p>Name:</p>
-		<p><input name="name" value="Your name"></p>
+		<p><input name="url" id="url" value="input url..."></p>
 
 		<p><input type="submit"></p>
 	</form>

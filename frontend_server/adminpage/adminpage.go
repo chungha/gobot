@@ -13,9 +13,16 @@ func MakePage(w http.ResponseWriter, r *http.Request) {
 	page, _ := loadHTML("adminpage/admin.html")
 	fmt.Fprintf(w, page)
 
-	v := r.URL.Query()
-	for a, b := range v {
-		fmt.Println(a, b)
+	//v := r.URL.Query()
+	//for a, b := range v {
+	//	fmt.Println(a, b)
+	//	//	send url...
+	//}
+
+	v3 := r.PostFormValue("url")
+	if v3 != nil {
+		//	send url address to backend
+		fmt.Println(v3)
 	}
 }
 
