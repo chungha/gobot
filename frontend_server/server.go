@@ -2,20 +2,19 @@ package main
 
 import (
 	"fmt"
-	"html"
+	"gobot/frontend_server/adminpage"
+	"gobot/frontend_server/searchpage"
 	"log"
 	"net/http"
 )
 
 func startServer() (bool, error) {
-	http.HandleFunc("/search", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "search, %q", html.EscapeString(r.URL.Path))
-	})
-	http.HandleFunc("/admin", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "admin, %q", html.EscapeString(r.URL.Path))
-	})
+	http.HandleFunc("/search", searchpage.MakePage)
+	http.HandleFunc("/admin", adminpage.MakePage)
 
 	log.Fatal(http.ListenAndServe("localhost:4000", nil))
+
+	fmt.Println("server ended...")
 
 	return true, nil
 }
