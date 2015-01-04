@@ -2,6 +2,7 @@ package adminpage
 
 import (
 	"fmt"
+	"gobot/frontend_server/ipcadapt"
 	"net/http"
 	"os"
 )
@@ -12,16 +13,11 @@ func MakePage(w http.ResponseWriter, r *http.Request) {
 	page, _ := loadHTML("adminpage/admin.html")
 	fmt.Fprintf(w, page)
 
-	//v := r.URL.Query()
-	//for a, b := range v {
-	//	fmt.Println(a, b)
-	//	//	send url...
-	//}
-
 	v3 := r.PostFormValue("url")
 	if len(v3) > 0 {
 		//	send url address to backend
 		fmt.Println(v3)
+		ipcadapt.CallIPC("admin", &v3)
 	}
 }
 

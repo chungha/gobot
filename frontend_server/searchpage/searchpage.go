@@ -2,6 +2,7 @@ package searchpage
 
 import (
 	"fmt"
+	"gobot/frontend_server/ipcadapt"
 	"net/http"
 	"os"
 )
@@ -14,6 +15,9 @@ func MakePage(w http.ResponseWriter, r *http.Request) {
 	for a, b := range v {
 		fmt.Println(a, b)
 		//	send url address to backend
+		if len(b) > 0 {
+			ipcadapt.CallIPC("search", &b[0])
+		}
 	}
 }
 
