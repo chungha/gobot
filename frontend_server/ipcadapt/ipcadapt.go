@@ -7,7 +7,7 @@ import (
 	"net/rpc"
 )
 
-func CallIPC(cmd string, v *string) {
+func CallIPC(cmd string, v *string) []string {
 	client, err := rpc.DialHTTP("tcp", "localhost"+":1234")
 	if err != nil {
 		log.Fatal("dialing:", err)
@@ -25,4 +25,10 @@ func CallIPC(cmd string, v *string) {
 	}
 
 	fmt.Printf("callIPC: %v, %v", req.Strs, ret.Strs)
+
+	if len(ret.Strs) > 0 {
+		return ret.Strs
+	}
+
+	return []string{}
 }
