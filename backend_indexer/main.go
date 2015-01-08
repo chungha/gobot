@@ -1,43 +1,19 @@
 package main
 
 import (
-	"fmt"
 	"gobot/backend_indexer/ipcadapt"
+	"gobot/common/ipc"
 )
-
-func adminLoop(msgs *chan string) {
-	for {
-		msg := <-*msgs
-		if len(msg) > 0 {
-			fmt.Println("admin server: ", msg)
-		}
-
-		//	TODO: convey url to indexer..
-		//GobotPmap(1)
-		//GobotSequential();
-	}
-}
-
-func searchLoop(msgs *chan string) {
-	for {
-		msg := <-*msgs
-		if len(msg) > 0 {
-			fmt.Println("search server: ", msg)
-		}
-	}
-}
 
 func main() {
 	done := make(chan bool)
 
-	reqFromUI := new(ipcadapt.IpcBackend)
+	cb := new(ipc.Ipc)
 
-	adminMsgs, seearchMsgs := reqFromUI.Prepare()
+	a := ipc.Ipc_func_tmpl(new(ipcadapt.Ipc_callback))
+	cb.CallBackIntf = &a
 
-	go adminLoop(adminMsgs)
-	go searchLoop(seearchMsgs)
-
-	reqFromUI.Start()
+	ipcadapt.Start(cb)
 
 	<-done
 }

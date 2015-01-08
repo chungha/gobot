@@ -6,23 +6,19 @@ import (
 	"net/http"
 )
 
-type SearchPage struct {
-	List []string
-}
+func MakePage(w http.ResponseWriter, r *http.Request) {
 
-func (inst *SearchPage) MakePage(w http.ResponseWriter, r *http.Request) {
-
-	//list := []string{"test haha !!!"}
+	list := []string{}
 
 	v := r.URL.Query()
 	for a, b := range v {
 		fmt.Println(a, b)
 		//	send url address to backend
 		if len(b) > 0 {
-			inst.List = ipcadapt.CallIPC("search", &b[0])
+			list = ipcadapt.CallIPC("search", &b[0])
 		}
 	}
 
-	page := MakeHtmlPage(inst.List)
+	page := MakeHtmlPage(list)
 	fmt.Fprintf(w, page)
 }
